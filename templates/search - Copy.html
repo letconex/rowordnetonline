@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+   <body>
+   tablenames{{tablenames}} 
+   columnnames{{columnnames}} zips {{zips}}
+      <form action = "{{ url_for('searchit') }}" method = "POST">
+         <h3>Search</h3>
+Database:
+<select name="tablename" class="custom-select" style="width:200px;>
+{% for tablename in tablenames %}
+<option  value="{{tablename}}">{{tablename}}</option>
+{% endfor %}
+  </select>
+<select name="languagename" class="custom-select">
+{% for languagename in columnnames %}
+<option  value="{{languagename}}">{{languagename}}</option>
+{% endfor %}
+  </select>
+Source language:
+<select name="languagenames" class="custom-select">
+<option value="DE">DE</option>
+<option value="EN">EN</option>
+<option value="RO">RO</option>
+  </select>
+  
+Zipx
+{% for tablenames, languagenames in zipx %}
+Tablenames: {{tablenames}} Langnames: {{languagenames}}
+{% endfor %}
+		
+		<form action = "{{ url_for('searchit') }}" method = "POST">
+         <h3>Search</h3>
+  <select name="tablename2" class="custom-select" style="width:200px;>
+{% for tablenames, languagenames in zipx %}
+<option  value="{{tablenames}}">{{tablenames}}</option>
+{% endfor %}
+  </select>
+    <select name="languagename2" class="custom-select">
+{% for languagename in zipx %}
+<option  value="{{languagename[0]}}">{{languagenames}}</option>
+{% endfor %}
+  </select>
+         <!-- Name<br> -->
+         <input type = "text" name = "searchformterm" /></br>
+         
+         <!-- Address<br> -->
+         <!-- <textarea name = "add" ></textarea><br> -->
+         
+         <!-- City<br> -->
+         <!-- <input type = "text" name = "city" /><br> -->
+         
+         <!-- PINCODE<br> -->
+         <!-- <input type = "text" name = "pin" /><br> -->
+         <input type = "submit" value = "Submit" /><br>
+      </form>
+   </body>
+</html>
+
+<select class="form-control" id="rating" name="rating">
+    <option value="5">5</option>
+    <option value="4">4</option>
+    <option value="3" selected>3</option>
+    <option value="2">2</option>
+    <option value="1">1</option>
+</select>
+
+<!-- curl "http://127.0.0.1:5000/searchit" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8" -H "Content-Type: application/x-www-form-urlencoded" --data-raw "searchformterm=Haus&add=&city=&pin=" -->
+
+<!-- import requests -->
+
+<!-- headers = { -->
+    <!-- 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', -->
+    <!-- 'Content-Type': 'application/x-www-form-urlencoded', -->
+<!-- } -->
+
+<!-- data = { -->
+  <!-- 'searchformterm': 'Haus', -->
+  <!-- 'add': '', -->
+  <!-- 'city': '', -->
+  <!-- 'pin': '' -->
+<!-- } -->
+
+<!-- response = requests.post('http://127.0.0.1:5000/searchit', headers=headers, data=data) -->

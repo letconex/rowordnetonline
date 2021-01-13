@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Search term: {{word}}</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+   <body>
+          <header>
+      <div class="container">
+        <h1 class="logo">List entries</h1>
+        <strong><nav>
+          <ul class="menu">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('home') }}">Search</a></li>
+          </ul>
+        </nav></strong>
+      </div>
+    </header>
+<p>Search term: <b>{{word}}</b></p>
+      <a href = "/">Back to search!</a>
+	  <div style="overflow-x:auto;">
+	  <table class = "searchresults">
+         <thead>
+            <td><b>Cuvânt</b></td>
+            <td><b>Definiție</b></td>
+            <!-- <td><b></b></td> -->
+         </thead>
+         {% for row in zipx %}
+            <tr>
+               <td>{{row[0]}}</td>
+               <td>{{row[1]}}</td>
+               <!-- <td> {{ row["DE"]}}</td> -->
+               <!-- <td>{{row['RO']}}</td>	 -->
+            </tr>
+         {% endfor %}
+      </table></div>
+      <a href = "/">Back to search!</a>
+   </body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+   <body>
+<!-- Rownumber: {{sourcelangs}} -->
+<!-- Counts: {{targetlangs}} -->
+<!-- Zips: {{zip1}}{{zip2}} -->
+<!-- colnames: {{colnamess}} -->
+<!-- Source: {{sourcelangs}} -->
+<!-- Target: {{targetlangs}} -->
+<!-- <br> -->
+  <head>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"> -->
+	<link rel="stylesheet" href='/static/css/main.css' />
+  </head>
+            <header>
+      <div class="container">
+        <h1 class="logo">Multilingual dictionary</h1>
+        <strong><nav>
+          <ul class="menu">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('searchform') }}">Search</a></li>
+          </ul>
+        </nav></strong>
+      </div>
+    </header>
+<!-- <h1>Home page</h1> -->
+    <p>Database:</p>
+<table border = 1 class = "dbtable">
+<thead>
+<tr>
+	<th>Dictionary</th>
+	<th>Source language</th>
+	<th>Target language</th>
+	<th>Records</th>
+</tr>
+</thead>
+<tbody>
+{% for tablenames, sourcelangs, targetlangs, counts in zips %}
+<tr>
+		<td>{{tablenames}}</td>
+		<td>{{sourcelangs}}</td>
+		<td>{{targetlangs}}</td>
+		<td>{{counts}}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+	  <a href = "/searchform">Search database!</a>
+      
+   </body>
+</html>

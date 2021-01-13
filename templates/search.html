@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+   <body>
+{{tablenames}}
+{{columnnames}}
+<!-- {{zipx}} -->
+         <h3>Search</h3>
+<form action = "{{ url_for('searchit') }}" method = "POST">
+<select name="tables" class="custom-select" style="width:200px;>
+{% for tablename in tablenames %}
+<option  value="{{tablename}}">{{tablename}}</option>
+{% endfor %}
+  </select>
+<!-- <select name="languagenames" class="custom-select"> -->
+<!-- {% for languagename in columnnames[0] %} -->
+<!-- <option  value="{{languagename}}">{{languagename}}</option> -->
+<!-- {% endfor %} -->
+  <!-- </select> -->
+Source language:
+<select name="languagenames" class="custom-select">
+<option value="DE">DE</option>
+<option value="EN">EN</option>
+<option value="RO">RO</option>
+  </select>
+
+		<form action = "{{ url_for('searchit') }}" method = "POST">
+
+         <!-- Name<br> -->
+         <input type = "text" name = "searchformterm" /></br>
+         
+         <!-- Address<br> -->
+         <!-- <textarea name = "add" ></textarea><br> -->
+         
+         <!-- City<br> -->
+         <!-- <input type = "text" name = "city" /><br> -->
+         
+         <!-- PINCODE<br> -->
+         <!-- <input type = "text" name = "pin" /><br> -->
+         <input type = "submit" value = "Submit" /><br>
+      </form>
+   </body>
+</html>
+
+<!-- curl "http://127.0.0.1:5000/searchit" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8" -H "Content-Type: application/x-www-form-urlencoded" --data-raw "searchformterm=Haus&add=&city=&pin=" -->
+
+<!-- import requests -->
+
+<!-- headers = { -->
+    <!-- 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', -->
+    <!-- 'Content-Type': 'application/x-www-form-urlencoded', -->
+<!-- } -->
+
+<!-- data = { -->
+  <!-- 'searchformterm': 'Haus', -->
+  <!-- 'add': '', -->
+  <!-- 'city': '', -->
+  <!-- 'pin': '' -->
+<!-- } -->
+
+<!-- response = requests.post('http://127.0.0.1:5000/searchit', headers=headers, data=data) -->
