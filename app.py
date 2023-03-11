@@ -46,9 +46,9 @@ def filterpos(word, posro): # NOUN, VERB, ADVERB, ADJECTIVE
     
 @app.route('/')
 def halllo():
-    # print ("Hello world")
+    print ("Hello world")
     intro = r"Search Romanian Wordnet: use URL + /search/?word=[word]&pos=[pos] <br>Pos can be NOUN, VERB, ADVERB, ADJECTIVE<br>Example: https://rowordnet.herokuapp.com/search/?word=casa&pos=NOUN"
-    return intro
+    return 'Hello, World!'
     
 @app.errorhandler(404) 
 # inbuilt function which takes error as parameter 
