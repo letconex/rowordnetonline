@@ -1,3 +1,2 @@
-# transformersmt
-Flask APP for the Romanian Wordnet hosted on Heroku
- 
+# Vercel TEST
+Flask APP
