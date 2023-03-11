@@ -1,2 +1,2 @@
-sqlite3
-requests
+sqlite3>=0.5.0
+requests>=2.26.0
