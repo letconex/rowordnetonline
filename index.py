@@ -9,6 +9,9 @@ def append2file(file2write2, text2write): # if file exists, if not a+
 
 @app.route('/')
 def home():
+    return 'Wordnet home'
+@app.route('/x')
+def homex():
    with sql.connect("MyDICs.db") as con:
         cur = con.cursor()
         # tablename = 'IATE-DERO'
