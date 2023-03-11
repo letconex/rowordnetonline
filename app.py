@@ -1,124 +1,195 @@
-# -*- coding: utf-8 -*-
-from flask import Flask, render_template, request, jsonify
-import rowordnet
-from rowordnet import *
+#!/usr/bin/env python3
+
+from flask import Flask, render_template, request
+import sqlite3 as sql
 app = Flask(__name__)
-app.config['JSON_AS_ASCII'] = False  # to print jsonify to utf-8 directly / or use json library instead
-app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-wn = rowordnet.RoWordNet()
+resultfile = 'resultfile.txt'
+def append2file(file2write2, text2write): # if file exists, if not a+
+    file = open(file2write2, mode='a+', encoding='utf-8')
+    file.write(str(text2write).encode('utf-8').decode('utf-8'))
+    file.close()
 
-def filterpos(word, posro): # NOUN, VERB, ADVERB, ADJECTIVE
-    if posro == 'NOUN':
-        synset_idx = wn.synsets(literal=word, pos=Synset.Pos.NOUN)
-        print("Filter by '{}'".format(posro))
-    elif posro == 'VERB':
-        synset_idx = wn.synsets(literal=word, pos=Synset.Pos.VERB)
-        print("Filter by '{}'".format(posro))
-    elif posro == 'ADVERB':
-        synset_idx = wn.synsets(literal=word, pos=Synset.Pos.ADVERB)
-        print("Filter by '{}'".format(posro))
-    elif posro == 'ADJECTIVE':
-        synset_idx = wn.synsets(literal=word, pos=Synset.Pos.ADJECTIVE)
-        print("Filter by '{}'".format(posro))
-    else:
-        synset_idx = wn.synsets(literal=word)
-        # print(synset_idx)
-    if synset_idx == []:
-        print("'" + word + "' not found!")
-    else:
-        wordlist = []
-        deflist = []
-        for synset_ID in synset_idx:
-            synset_object = wn(synset_ID)
-            # print("{0}, {1}, {2}, {3}, {4}".format(synset_object.literals, synset_object.pos, synset_object.definition, synset_object.domain, synset_object.sumo))
-            # print(type(synset_object.literals)) # 
-            # print("{0}, {1}, {2}".format([str(x) for x in synset_object.literals], synset_object.pos, synset_object.definition))
-            # print("<b>{0}</b> = {1}<br>".format(str(synset_object.literals)[2:-2].replace("_", " ").replace("'", ""), synset_object.definition))
-            words = str(synset_object.literals)[2:-2].replace("_", " ").replace("'", "")
-            defs = str(synset_object.definition)
-            wordlist.append(words)
-            deflist.append(defs)
-            # print(words)
-            # print(defs)
-        # print(resultlist)
-    # return words, defs
-    return wordlist, deflist
-    
 @app.route('/')
-def halllo():
-    print ("Hello world")
-    intro = r"Search Romanian Wordnet: use URL + /search/?word=[word]&pos=[pos] <br>Pos can be NOUN, VERB, ADVERB, ADJECTIVE<br>Example: https://rowordnet.herokuapp.com/search/?word=casa&pos=NOUN"
-    return 'Hello, World!'
-    
-@app.errorhandler(404) 
-# inbuilt function which takes error as parameter 
-def not_found(e):
-# defining function
-    messagenotfound = 'Search term not entered!'
-    return messagenotfound
+def home():
+   with sql.connect("MyDICs.db") as con:
+        cur = con.cursor()
+        # tablename = 'IATE-DERO'
+        searchterm = 'Lagerung'
+        sourcelang = 'DE'
+        targetlang = 'RO'
+        # queryS = 'SELECT * FROM "' + tablename + '" WHERE "' + sourcelang + '" LIKE "%' + str(searchterm) + '%"'
+        # SELECT * FROM "IATE-DERO" WHERE "DE" LIKE "%Lagerung%"
+        # return str(queryS)
+        # cur.execute(queryS)
+        # result = cur.fetchall()
+        # return(str({{sourcelang}}))
+        queryN = 'SELECT name FROM sqlite_master WHERE type = "table"'
+        cur.execute(queryN)
+        tablenames = cur.fetchall()
+        tablenamescut = []
+        for tablename in tablenames:
+            tablename = str(tablename)[2:-3]
+            tablenamescut.append(str(tablename))
+        tablenames = tablenamescut
+        # queryC = 'SELECT COUNT (*) FROM "' + str(tablenames [0])[2:-3] + '"'
+        # return render_template("home.html", sourcelang = sourcelang, targetlang = targetlang, tablenames = tablenames)
+        counts = []
+        for tablename in tablenames:
+            queryC = 'SELECT COUNT (*) FROM "' + str(tablename) + '"'
+            cur.execute(queryC)
+            count = cur.fetchall()            # count the number of rows in table
+            counts.append(str(count)[2:-3])
+            # return render_template("home.html", sourcelang = sourcelang, targetlang = targetlang, tablenames = tablenames, tablename = tablename, counts = counts, queryC = queryC)
+        # typetablename = str(type(tablename))
+        # tablenamelist = list(tablenames)
+        zips = zip(tablenames, counts)
+        return render_template("home.html", sourcelang = sourcelang, targetlang = targetlang, tablenamess = tablenamescut, countss = counts, zips = zips)
+        # return render_template("home.html", sourcelang = sourcelang, targetlang = targetlang, tablenames = tablenamescut, tablename = tablename, counts = counts, queryC = queryC, count = count, zips = zip(tablenames, counts))
+        # return render_template("home.html", sourcelang = sourcelang, targetlang = targetlang, tablenames = tablenames, queryC = queryC)
 
-@app.route("/search/")
-def home(word="", pos=""):
-    word = request.args.get('word', word)
-    # word = "tren"
-        # modelname = 'Helsinki-NLP/opus-mt-{0}-{1}'.format(src, trg)
-    wn = rowordnet.RoWordNet()
-    #As words are polysemous, searching for a word will likely yield more than one synset. A word is known as a literal in RoWordNet, and every synset has one or more literals that are synonyms.
-    try: # if not entered, response type defaults to html
-        posro = request.args.get('pos', posro) # NOUN, VERB, ADVERB, ADJECTIVE
-        # posro = "NOUN"
-    except:
-        print('No POS!')
-        # return('No POS!')
-        posro = ''
-    try:
-        resultlist = filterpos(word, posro)
-        wordlist, deflist = filterpos(word, posro)
-        # print ("Found")
-    # return word
-        # return tuple(resultlist)
-        zipx = zip(wordlist, deflist)
-        return render_template("list.html", wordlist = wordlist, deflist = deflist, zipx = zipx, word=word, posro=posro)
-        # for res in tuple(resultlist):
-            # return res
-    except Exception as error:
-        print(word + ' not found! ')
-        print(error)
-        return('Not found!')
-    
-# synset_ids = wn.synsets(literal=word)
-# print(synset_ids)
-# print(wn.synsets(word))
-#for synset_id in wn.synsets(word):
-    # wn.print_synset(synset_id)
-    # synset_object = wn.synset(synset_id)
-    # synset_object = wn(synset_id)
-    # print(synset_object)
-    # pass
-    # print("Literals (synonyms): {}".format(synset_object.literals))
-    # print("Definition: {}".format(synset_object.definition))
-    # print("POS, DOMAIN, SUMO: {0}, {1}, {2}".format(synset_object.pos, synset_object.domain, synset_object.sumo))
-    # print("Print its ID: {}".format(synset_object.pos + ' - ' + synset_object.domain + ' - ' + synset_object.sumo))
-# synset_ids_all = wn.synsets() # get all synset IDs in RoWordNet
-# synset_ids_verbs = wn.synsets(pos=synset.pos.VERB) # get all verb synset IDs
-# synset_ids = wn.synsets(literal="cal", pos=Synset.Pos.NOUN) # get all synset IDs that contain word "cal" and are nouns
-# print(synset_ids)
-# synset_id = wn.synsets(word)[2] # select the third synset from all synsets containing word "tren"
-# print("\nPrint all outbound relations of {}".format(wn.synset(synset_id)))
-# outbound_relations = wn.outbound_relations(synset_id)
-# for outbound_relation in outbound_relations:
-    # target_synset_id = outbound_relation[0]        
-    # relation = outbound_relation[1]
-    # print("\tOutboud relation [{}] to synset {}".format(relation,wn.synset(target_synset_id)))
-    
-# synset_id = wn.synsets(word)[2] # select the third synset from all synsets containing word "tren"
-# print("\nPrint all inbound relations of {}".format(wn.synset(synset_id)))
-# inbound_relations = wn.inbound_relations(synset_id)
-# for inbound_relation in inbound_relations:
-    # target_synset_id = inbound_relation[0]        
-    # relation = inbound_relation[1]
-    # print("\t Inbound relation [{}] to synset {}".format(relation,wn.synset(target_synset_id)))
+        # queryC = 'SELECT COUNT (*) FROM "' + tablename + '"'
+        # count = cur.execute(queryC).fetchone()[0] # count the number of rows in table        # get list of table names# return render_template('home.html')
+# return 'home.html'
+        # return(str(result[1]))
+        # queryA = 'INSERT INTO tablename (name,addr,city,pin) VALUES (("Buddy Rich"),("Candido"),("Charlie Byrd"),("Charlie 1234"))'
+        # cur.execute(queryA)
+        # con.commit()
+        # return("Record successfully added")
+        # con.close()
 
-if __name__ == '__main__':
-   # app.run(threaded=True, port=5000, debug = True)
-   app.run(port=5000, debug = True)
+@app.route('/enternew')
+def new_student():
+   return render_template('addnew.html')
+
+@app.route('/showsearchform')
+def showsearchform():
+    return render_template("search.html")
+
+
+# @app.route('/<some_place>')
+# def some_place_page(some_place):
+@app.route('/searchit', methods = ['POST', 'GET'])
+def searchit():
+    tablename = 'IATE-DERO'
+    # searchterm = 'Lagerung'
+    sourcelang = 'DE'
+    targetlang = 'RO'
+    if request.method == 'POST':
+        # try:
+        searchterm = request.form['searchformterm']
+            # addr = request.form['add']
+            # city = request.form['city']
+            # pin = request.form['pin']
+        # return str(nm)
+    # msg = "Record successfully added"
+        # return render_template("result.html", msg = nm)
+        # return render_template("result.html", msg = msg)
+        with sql.connect("MyDICs.db") as con:
+            cur = con.cursor()
+            queryS = 'SELECT * FROM "' + tablename + '" WHERE "' + sourcelang + '" LIKE "%' + str(searchterm) + '%"'
+            cur.execute(queryS)
+            rows = cur.fetchall()
+            # con.commit()
+            for row in rows:
+                text2write = str(row[0]) + ' = ' + str(row[1]) + '\r\n'
+                append2file(resultfile, text2write)
+            # msg = "Record successfully added"
+            return render_template("list.html", sourcelang = sourcelang, rows = rows, targetlang = targetlang, searchterm = searchterm)
+            con.close()
+        # except:
+            # con.rollback()
+            # msg = "error in insert operation"
+        # finally:
+            # return render_template("result.html",msg = msg)
+            # return render_template("list.html", sourcelang = sourcelang, resultrows = rows, targetlang = targetlang)
+            # con.close()
+
+#http://traduceri.eu.pythonanywhere.com/search/?slang=DE&term=Katze
+# @app.route('/search', methods = ['POST', 'GET'])
+@app.route('/search/slang=<sourcelang>&term=<searchterm>')
+def searchitvar(sourcelang, searchterm):
+    #con = sql.connect("MyDICs.db")
+    #con.row_factory = sql.Row
+    #cur = con.cursor()
+    tablename = 'IATE-DERO'
+    # sourcelang = 'DE'
+    sourcelang = request.args.get('slang')
+    print(sourcelang)
+    targetlang = 'RO'
+    searchterm = request.args.get('term')
+    print(searchterm)
+    if request.method == 'GET':
+        # try:
+        with sql.connect("MyDICs.db") as con:
+            cur = con.cursor()
+            queryS = 'SELECT * FROM "' + tablename + '" WHERE "' + sourcelang + '" LIKE "%' + str(searchterm) + '%"'
+            cur.execute(queryS)
+            rows = cur.fetchall()
+            return render_template("list.html", sourcelang = sourcelang, rows = rows, targetlang = targetlang, searchterm = searchterm)
+
+            if rows == '':
+                messagenotfound = 'Search term not found!'
+                return render_template("notfound.html", msg = messagenotfound)
+            con.close()
+        # except:
+            # con.rollback()
+            # msg = "error in insert operation"
+        # finally:
+            # return render_template("result.html",msg = msg)
+            # return render_template("list.html", sourcelang = sourcelang, resultrows = rows, targetlang = targetlang)
+            # con.close()
+
+@app.route('/addrec',methods = ['POST', 'GET'])
+def addrec():
+   if request.method == 'POST':
+      try:
+         nm = request.form['nm']
+         addr = request.form['add']
+         city = request.form['city']
+         pin = request.form['pin']
+
+         with sql.connect("MyDICs.db") as con:
+            cur = con.cursor()
+            tablename = 'DE-RO'
+            cur.execute("INSERT INTO tablename (name,addr,city,pin) VALUES (?,?,?,?)",(nm,addr,city,pin) )
+
+            con.commit()
+            msg = "Record successfully added"
+      except:
+         con.rollback()
+         msg = "error in insert operation"
+
+      finally:
+         return render_template("result.html",msg = msg)
+         con.close()
+
+@app.route('/list')
+def list():
+    con = sql.connect("MyDICs.db")
+    con.row_factory = sql.Row
+    cur = con.cursor()
+    tablename = 'IATE-DERO'
+    searchterm = 'Lagerung'
+    sourcelang = 'DE'
+    targetlang = 'RO'
+    queryS = 'SELECT * FROM "' + tablename + '" WHERE "' + sourcelang + '" LIKE "%' + str(searchterm) + '%"'
+    # SELECT * FROM "IATE-DERO" WHERE "DE" LIKE "%Lagerung%"
+    # return str(queryS)
+    cur.execute(queryS)
+    # result = cur.fetchall()
+    # return(str(result))
+   # cur.execute("select * from tablename")
+    rows = cur.fetchall()
+    return render_template("list.html", sourcelang = sourcelang, resultrows = rows, targetlang = targetlang)
+    # return render_template("list.html", resultrows = rows)
+
+# import sqlite3
+# conn = sqlite3.connect('MyDICs.db')
+# print ("Opened database successfully")
+# conn.execute('CREATE TABLE tablename (name TEXT, addr TEXT, city TEXT, pin TEXT)')
+# print ("Table created successfully")
+# conn.close()
+
+# if __name__ == '__main__':
+# app.run(debug = False, host='127.0.0.1', port=5001)
+#     app.run()
