@@ -1,5 +1,12 @@
-from flask import Flask, render_template, request
+-*- coding: utf-8 -*-
+from flask import Flask, render_template, request, jsonify
+import rowordnet
+from rowordnet import *
+
 app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False  # to print jsonify to utf-8 directly / or use json library instead
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
+wn = rowordnet.RoWordNet()
 
 @app.route('/')
 def home():
@@ -9,17 +16,11 @@ def home():
 def about():
     return 'About'
 
+@app.route('/search')
+def search():
+    return 'Search'
 
 '''
-# -*- coding: utf-8 -*-
-from flask import Flask, render_template, request, jsonify
-import rowordnet
-from rowordnet import *
-app = Flask(__name__)
-app.config['JSON_AS_ASCII'] = False  # to print jsonify to utf-8 directly / or use json library instead
-app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-wn = rowordnet.RoWordNet()
-
 def filterpos(word, posro): # NOUN, VERB, ADVERB, ADJECTIVE
     if posro == 'NOUN':
         synset_idx = wn.synsets(literal=word, pos=Synset.Pos.NOUN)
