@@ -6,6 +6,7 @@ wn = rowordnet.RoWordNet()
 app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['JSON_AS_ASCII'] = False  # to print jsonify to utf-8 directly / or use json library instead
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 def filterpos(word, posro): # NOUN, VERB, ADVERB, ADJECTIVE
     if posro == 'NOUN':
@@ -65,7 +66,7 @@ def search():
     return render_template("result.html", searchterm=searchterm, wordnetresult=wordnetresult, POS=POS)
 
 if __name__ == '__main__':
-   app.config['SECRET_KEY'] = '123'
+   app.config['SECRET_KEY'] = '12345'
    app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
    app.run(debug = True, host='127.0.0.1', port=5000)
    # app.run(debug = False, host = '127.0.0.1', port = 5000)
