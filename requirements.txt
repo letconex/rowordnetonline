@@ -1,2 +1,8 @@
 Flask>=2.2.2
 requests>=2.26.0
+pickle
+networkx
+lxml.etree
+collections
+from queue
+math
