@@ -6,6 +6,7 @@ wn = rowordnet.RoWordNet()
 app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['JSON_AS_ASCII'] = False  # to print jsonify to utf-8 directly / or use json library instead
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
+app.secret_key = 'TiberiuCristianLeon'
 
 def filterpos(word, posro): # NOUN, VERB, ADVERB, ADJECTIVE
     if posro == 'NOUN':
