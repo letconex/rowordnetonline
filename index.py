@@ -1,26 +1,12 @@
--*- coding: utf-8 -*-
-from flask import Flask, render_template, request, jsonify
+# -*- coding: utf-8 -*-
+from flask import Flask, render_template, request, flash, jsonify
 import rowordnet
 from rowordnet import *
-
-app = Flask(__name__)
+wn = rowordnet.RoWordNet()
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['JSON_AS_ASCII'] = False  # to print jsonify to utf-8 directly / or use json library instead
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-wn = rowordnet.RoWordNet()
 
-@app.route('/')
-def home():
-    return "Home Rowordnet"
-
-@app.route('/about')
-def about():
-    return 'About'
-
-@app.route('/search')
-def search():
-    return 'Search'
-
-'''
 def filterpos(word, posro): # NOUN, VERB, ADVERB, ADJECTIVE
     if posro == 'NOUN':
         synset_idx = wn.synsets(literal=word, pos=Synset.Pos.NOUN)
@@ -50,18 +36,47 @@ def filterpos(word, posro): # NOUN, VERB, ADVERB, ADJECTIVE
             # print("<b>{0}</b> = {1}<br>".format(str(synset_object.literals)[2:-2].replace("_", " ").replace("'", ""), synset_object.definition))
             words = str(synset_object.literals)[2:-2].replace("_", " ").replace("'", "")
             defs = str(synset_object.definition)
-            wordlist.append(words)
-            deflist.append(defs)
             # print(words)
             # print(defs)
-        # print(resultlist)
+            wordlist.append(words)
+            deflist.append(defs)
     # return words, defs
     return wordlist, deflist
+
+@app.route('/')
+def home():
+    flash('Search Romanian Wordnet: <br>POS can be NOUN, VERB, ADVERB, ADJECTIVE!')
+    return render_template("home.html")
+
+@app.route('/search')
+def about():
+    return 'About'
+
+@app.route('/searchform.html', methods=['POST', 'GET'])
+def search():
+    if request.method == 'POST':
+        searchterm = request.form.get('searchformterm')
+        POS = 'ALL'
+        wordnetresult = filterpos(searchterm, POS)
+    if request.method == 'GET':
+        searchterm = 'Insert term'
+        wordnetresult = 'Insert term'
+    print(searchterm)
+    return render_template("result.html", searchterm=searchterm, wordnetresult=wordnetresult, POS=POS)
+
+if __name__ == '__main__':
+   app.config['SECRET_KEY'] = '123'
+   app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+   app.run(debug = True, host='127.0.0.1', port=5000)
+   # app.run(debug = False, host = '127.0.0.1', port = 5000)
+
+'''
+
     
 @app.route('/')
 def halllo():
     # print ("Hello world")
-    intro = r"Search Romanian Wordnet: use URL + /search/?word=[word]&pos=[pos] <br>Pos can be NOUN, VERB, ADVERB, ADJECTIVE<br>Example: https://rowordnet.herokuapp.com/search/?word=casa&pos=NOUN"
+    intro = r"<br>Example: https://rowordnet.herokuapp.com/search/?word=casa&pos=NOUN"
     return intro
     
 @app.errorhandler(404) 

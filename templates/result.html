@@ -1,9 +1,21 @@
-<!doctype html>
-<html>
-   <body>
-   
-      result of addition: {{msg}}
-      <h2><a href = "\">Go back to home page!</a></h2>
-      
-   </body>
-</html>
+{% extends "home.html" %}
+{% block content %}
+<p>Search term: <b>{{searchterm}}</b></p>
+<!-- <p>Search term: <b>{{wordnetresult}}</b></p> -->
+      <a href = "/searchform">Back to search!</a>
+	  <div style="overflow-x:auto;">
+	  <table class = "searchresults">
+         <thead>
+            <td><b>Results for: {{searchterm}} {{POS}}</b></td>
+            </thead>
+         {% for row in wordnetresult %}
+            <tr>
+               <td>{{row}}</td>
+               <!-- <td>{{row}}</td> -->
+               <!-- <td> {{ row["DE"]}}</td> -->
+               <!-- <td>{{row['RO']}}</td>	 -->
+            </tr>
+         {% endfor %}
+      </table></div>
+<a href = "{{ url_for('search') }}	">Search database!</a>
+{% endblock %}

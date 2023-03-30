@@ -1,0 +1,127 @@
+ol {
+  display: block;
+  list-style-type: upper-roman;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 40;
+  margin-right: 0;
+  padding-left: 4px;
+}
+ul {
+  list-style-type: none;
+  margin: 1;
+  padding: 1;
+  overflow: hidden;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+}
+
+li {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+  margin: 1;
+  padding: 1;
+  border-radius: 2px;
+  display: inline;
+  text-align: left;
+}
+
+li.navbarlinks a {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  margin: 4;
+  padding: 1;
+  background-color: white;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+  border-radius: 5px;
+}
+
+li a:hover {
+  background-color: rgb(155, 155, 145);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+}
+.active {
+  background-color: rgb(55, 155, 145);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+}
+
+body {
+  background: white;
+  margin-top: 5px;
+  margin-left: 5px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+  }
+ 
+h2 {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+  font-size: 1em;
+  color: black;
+  margin: 1px 0; 
+  background-color: white;
+  padding: 1px 1px;
+  }
+ 
+p {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+  font-size: 1.2em;
+  color: DarkSlateGray;
+  }
+
+input[type=submit] {
+  background-color: white;
+  color: black;
+  border: 2px rgb(155, 155, 145);
+  width: 100px;
+  border-radius: 10px;
+  margin: 1px 0; 
+  height: 40px;
+  padding: 1px;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+input[type=submit]:hover {
+  background-color: rgb(155, 155, 145);
+  color: rgb(15, 15, 15); 
+  transition: width 1s;
+  transition: font-size 1s;
+  font-size: 1em; 
+  width: 120px;
+  border-radius: 5px;
+}
+
+textarea {
+  height: 100px;
+  width: 50%;
+  resize: none;
+  word-wrap: normal;
+  word-break: break-all;
+  margin: 1px 0; 
+  background-color: rgb(245, 245, 245);
+  padding: 1px 1px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+  border: 1px rgb(155, 155, 145);}
+
+table.dicsearchresults {
+    border-collapse: collapse;
+    width: 80%;
+  }
+table.dicsearchresults th {
+  border: 1px solid rgb(59, 57, 56);
+  text-align: center;
+  padding: 1px;
+  background-color: #343a38;
+  color: white;
+  }
+
+table.dicsearchresults tr, td {
+  /* border: 1px solid #ddd; */
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  padding: 1px;
+}
+tr:hover {background-color: rgb(211, 208, 208);}
+tr:nth-child(even) {background-color: rgb(166, 161, 161);}

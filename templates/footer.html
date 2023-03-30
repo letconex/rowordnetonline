@@ -1,0 +1,8 @@
+<h2 class="logo">Navigation</h2>
+<div class="container">
+	<strong><nav><ul>
+		{% for htmlname, prettyname in pages.items(): %}
+			<li><a href="{{htmlname}}.html">{{prettyname}}</a></li>
+		{% endfor %}
+		</ul></nav></strong>
+</div>

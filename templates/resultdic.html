@@ -1,0 +1,26 @@
+{% extends "header.html" %}
+{% block content %}
+{% include "searchformsdic.html" %}
+<!-- Selected dictionaries: <b>{{selecteddiclist}}</b> -->
+<!-- Selected language combination: <b>{{sourcelang}}-{{targetlang}}</b> -->
+<!-- Search options: <b>{{searchformoptions}}</b> -->
+<!-- Search term: <b>{{searchformterm}}</b> -->
+Results for: <b>{{searchformterm}}</b><br>
+	  <div>
+	  <table class = "dicsearchresults">
+         <thead>
+            <th><b>ID</b></th>
+            <th><b>{{sourcelang}}</b></th>
+            <th><b>{{targetlang}}</b></th>
+            <!-- <td><b></b></td> -->
+         </thead>
+         {% for row in rows[0]: %}
+      <tr class="bilingualrow">
+         <td class='index'>{{loop.index}}</td>
+         <td class="sourcecol">{{row[0] |safe}}</td>
+         <td class="targetcol">{{row[1] |safe}}</td>
+      </tr>
+      {% endfor %}
+      </table></div>
+{% include "footer.html" %}
+{% endblock %}

@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bw.css') }}">
+	<!-- <link rel="stylesheet" href='/static/css/main.css' /> -->
+</head>
+{% extends "header.html" %}
+<body>
+{% block content %}
+{% include "searchformsmt.html" %}
+{% include "footer.html" %}
+{% endblock %}
+</body>
+</html>

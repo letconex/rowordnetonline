@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bw.css') }}">
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='term.css') }}"> -->
+<title>Multilingual dictionary</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="Python, dictionary, language, machine translation">
+<meta name="description" content="Multilingual ressources">
+</head>
+<header>
+<h2 class="logo">Multilingual search</h2>
+</header>
+<!-- <h1>Home page</h1> -->
+<body>
+<div class="container">
+<strong><nav><ul>
+{% for htmlname, prettyname in pages.items(): %}
+	<li><a href="{{htmlname}}.html">{{prettyname}}</a></li>
+{% endfor %}
+</ul></nav></strong>
+</div>
+{% block content %}
+{% endblock %}
+</body>
+</html>

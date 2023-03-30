@@ -1,0 +1,26 @@
+<form method='POST' action='/resultdic.html' autocomplete="on">
+Select source language:
+<select name="sourcelanguagenames" class="custom-select">
+{% for slkey, slvalue in SLselectedcheckstates.items(): %}
+    <option value="{{slkey}}" {{slvalue}}>{{slkey}}</option>
+{%endfor%}
+</select>
+Select target language:
+<select name="targetlanguagenames" class="custom-select">
+{% for tlkey, tlvalue in TLselectedcheckstates.items(): %}
+    <option value="{{tlkey}}" {{tlvalue}}>{{tlkey}}</option>
+{%endfor%}
+</select>
+<br>
+Select one or more dictionaries:
+{%for dic in alldiclist:%}
+	{{dic}}<input type='checkbox' name='dictionaries' value='{{dic}}' id='dictionaries' {{dictselectedcheckstates[dic]}}>
+{%endfor%}
+<br>Search options:
+{%for key, value in radiooptions.items():%}
+	<input type="radio" id="bimono" name="bimono" value="{{key}}" {{value}}>{{key}}
+{%endfor%}
+<br>
+<input type= "text" name= "searchformterm" placeholder="{{searchformterm}}" /></br>
+<input type='submit' class = "dicbutton">
+</form>

@@ -1,0 +1,22 @@
+<form method='POST' action='/resultmt.html' autocomplete="on">
+Select source language:
+<select name="sourcelanguagenames" class="custom-select">
+{% for slkey, slvalue in SLselectedcheckstates.items(): %}
+    <option value="{{slkey}}" {{slvalue}}>{{slkey}}</option>
+{%endfor%}
+</select>
+Select target language:
+<select name="targetlanguagenames" class="custom-select">
+{% for tlkey, tlvalue in TLselectedcheckstates.items(): %}
+    <option value="{{tlkey}}" {{tlvalue}}>{{tlkey}}</option>
+{%endfor%}
+</select>
+</br>Select one or more machine translation engines:
+<!-- {{allmtlist}} -->
+{%for mtengine in allmtlist:%}
+	{{mtengine}}<input type='checkbox' name='mtengines' value='{{mtengine}}' id='mtengines' {{mtselectedcheckstates[mtengine]}}>
+{%endfor%}
+</br>
+<textarea name = "searchformterm"/></textarea></br>
+<input type='submit'>
+</form>

@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<body>
+{% include "header.html" %}
+{% block content %}
+Multilingual dictionary and MT search engine<br>
+Available dictionary ressources:
+<ul>
+{% for dict in alldiclist: %}
+	<li>{{dict}}</li>
+{% endfor %}
+</ul>
+<br>
+Available MT engines:
+<ul>
+{% for mt in allmtlist: %}
+	<li>{{mt}}</li>
+{% endfor %}
+</ul>
+<br>
+Available languages:
+{% for lang in alllangshort: %}
+	{{lang}} <--> 
+{% endfor %}
+<br>
+{% endblock %}
+{% include "footer.html" %}
+</body>
+</html>
