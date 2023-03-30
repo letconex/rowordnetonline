@@ -4,5 +4,5 @@ pickle
 networkx
 lxml.etree
 collections
-from queue
+queue
 math
