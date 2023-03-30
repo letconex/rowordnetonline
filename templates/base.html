@@ -5,15 +5,15 @@
 <meta charset="UTF-8">
 <meta name="keywords" content="RoWordNet, dictionary, language, translation">
 <meta name="description" content="RoWordNet dictionary">
-<h1>RoWordNet</h1>
+<!-- <h1>RoWordNet</h1> -->
 <h2 class="logo">RoWordNet</h2>
 </head>
 <header>
       <div class="container">
         <strong><nav>
           <ul class="menu">
-            <li><a href="{{ url_for('home') }}">Home</a></li>
             <li><a href="{{ url_for('search') }}">Search</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
           </ul>
         </nav></strong>
       </div>
@@ -29,10 +29,8 @@
     </ul>
   {% endif %}
 {% endwith %}
-{% include "searchform.html" %}
 {% endblock %}
 {% block content %}
-<a href = "{{ url_for('search') }}	">Search database!</a>
 {% endblock %}
 </body>
 </html>

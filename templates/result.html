@@ -1,21 +1,26 @@
-{% extends "home.html" %}
+{% extends "search.html" %}
 {% block content %}
 <p>Search term: <b>{{searchterm}}</b></p>
 <!-- <p>Search term: <b>{{wordnetresult}}</b></p> -->
-      <a href = "/searchform">Back to search!</a>
 	  <div style="overflow-x:auto;">
-	  <table class = "searchresults">
+	  <table class = "searchresults" width="100%">
          <thead>
-            <td><b>Results for: {{searchterm}} {{POS}}</b></td>
+            <td><b>Results for: {{searchterm}} POS: {{POS}}</b></td>
             </thead>
-         {% for row in wordnetresult %}
-            <tr>
-               <td>{{row}}</td>
+<tr>
+{% if 'not found!' in wordnetresult[0] %}
+    <td>{{wordnetresult}}</td>
+{% else %}
+    {% for row in wordnetresult %}
+    <td>{% for rowa in row %}
+               {{rowa}}</br>
                <!-- <td>{{row}}</td> -->
                <!-- <td> {{ row["DE"]}}</td> -->
                <!-- <td>{{row['RO']}}</td>	 -->
-            </tr>
-         {% endfor %}
+       {% endfor %}</td>
+    {% endfor %}
+{% endif %}
+          </tr>
       </table></div>
-<a href = "{{ url_for('search') }}	">Search database!</a>
+<!-- <a href = "{{ url_for('search') }}">Search database!</a> -->
 {% endblock %}

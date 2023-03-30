@@ -24,7 +24,9 @@ def filterpos(word, posro): # NOUN, VERB, ADVERB, ADJECTIVE
         synset_idx = wn.synsets(literal=word)
         # print(synset_idx)
     if synset_idx == []:
-        print("'" + word + "' not found!")
+        notfoundmessage = f'{word} not found!'
+        # print(notfoundmessage)
+        return [notfoundmessage]
     else:
         wordlist = []
         deflist = []
@@ -43,26 +45,26 @@ def filterpos(word, posro): # NOUN, VERB, ADVERB, ADJECTIVE
     # return words, defs
     return wordlist, deflist
 
-@app.route('/')
-def home():
-    flash('Search Romanian Wordnet: <br>POS can be NOUN, VERB, ADVERB, ADJECTIVE!')
-    return render_template("home.html")
-
-@app.route('/search')
+@app.route('/about')
 def about():
-    return 'About'
+    flash('Search Romanian Wordnet: POS can be NOUN, VERB, ADVERB, ADJECTIVE!')
+    return render_template("base.html")
 
-@app.route('/searchform.html', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET'])
 def search():
     if request.method == 'POST':
         searchterm = request.form.get('searchformterm')
         POS = 'ALL'
         wordnetresult = filterpos(searchterm, POS)
+        print(f'Query term: {searchterm}')
+        return render_template("result.html", searchterm=searchterm, wordnetresult=wordnetresult, POS=POS)
     if request.method == 'GET':
-        searchterm = 'Insert term'
+        searchterm = ['Insert term']
         wordnetresult = 'Insert term'
-    print(searchterm)
-    return render_template("result.html", searchterm=searchterm, wordnetresult=wordnetresult, POS=POS)
+        POS = 'ALL'
+        return render_template("search.html", searchterm=searchterm, wordnetresult=wordnetresult, POS=POS)
+    
+    
 
 if __name__ == '__main__':
    app.config['SECRET_KEY'] = 'TiberiuCristianLeon'
